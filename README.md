@@ -5,7 +5,7 @@
 
 I've been upgrading [Istio](https://github.com/istio/istio) pretty much since it was born.  I've encountered my fair share of bugs during the upgrade process, and the vast majority are due to nuances in my configuration or environment, rather than obvious bugs in core components.
 
-Therefore, I accept that when testing Istio releases in my environment, I'm going to find issues.  This project is about surfacing those issues as soon as possible during release testing in a qualifying environment.
+Therefore, I accept that when testing Istio releases in my environment, I'm going to find issues.  This project is about surfacing those issues as soon as possible during release testing in a qualifying environment.  However, I actually run it continually on all my Istio clusters.
 
 ### How?
 
