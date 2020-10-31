@@ -25,7 +25,7 @@ I've hit many-a-bugs causing by rolling deployments, for example when you update
 
 Well, I'm presuming you're already monitoring, graphing and alerting on the istio request metrics such as `istio_requests_total{response_code=~"5.*"}`.  So that's on you.
 
-![dashboard](dashboard.png)
+![metrics](metrics.png)
 
 ## How do I install it
 

@@ -13,7 +13,7 @@ import Kubernetes from 'lib/kubernetes/client'
 import SimpleServer from 'lib/apps/simple-server'
 import { IWebServer } from 'lib/web-server'
 import { LoadTester } from 'lib/loadTester'
-import Config from './config'
+import Config from 'lib/config'
 
 const startApp = process.argv[2]
 if (!startApp) {
