@@ -1,7 +1,7 @@
 import Logger from 'lib/logger'
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
-import { HttpMethod } from 'lib/apps/loadTester'
+import { HttpMethod } from 'lib/apps/load-tester'
 
 const logger = new Logger('config')
 

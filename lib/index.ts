@@ -12,7 +12,7 @@ import Operator from 'lib/apps/operator'
 import Kubernetes from 'lib/kubernetes/client'
 import SimpleServer from 'lib/apps/simple-server'
 import { IWebServer } from 'lib/web-server'
-import { LoadTester } from 'lib/apps/loadTester'
+import { LoadTester } from 'lib/apps/load-tester'
 import Config from 'lib/config'
 
 const startApp = process.argv[2]
