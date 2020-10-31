@@ -26,6 +26,10 @@ You get the idea.  It's the cardinality of the test that's helped me find way mo
 
 I've hit many-a-bugs causing by rolling deployments, for example when you update your control-plane, and then rolling restart an app, so you have varying proxy versions.  As a result, `testyomesh` has an operator which periodically (between 5 and 10 mins) rolling restarts all the services to create some churn.
 
+### But wait, there's even more!
+
+I've hit a few bugs in the past when listeners get reloaded, therefore the `operator` also creates and deleting a `security.istio.io/v1beta1/AuthorizationPolicy` every 5-10 minutes, which triggers an inbound listener reload.  You need to be on `1.6+` for this to work (logs errors otherwise).
+
 ## How do I know somethings broken?
 
 Well, I'm presuming you're already monitoring, graphing and alerting on the istio request metrics such as `istio_requests_total{response_code=~"5.*"}`.  So that's on you.

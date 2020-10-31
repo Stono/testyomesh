@@ -251,18 +251,18 @@ export default class Kubernetes implements IKubernetes {
       return
     }
     this.initialising = true
-    this.logger.debug('loading kubernetes spec')
+    this.logger.info('loading kubernetes spec')
     await this.client.loadSpec()
     if (this.loadCustomResources) {
-      this.logger.debug('spec loaded, loading crds')
+      this.logger.info('spec loaded, loading crds')
       const query = await (this.client.apis['apiextensions.k8s.io']
         .v1beta1 as any).customresourcedefinition.get()
       query.body.items.forEach((crd) => {
         this.client.addCustomResourceDefinition(crd)
       })
-      this.logger.debug(`${query.body.items.length} crds loaded`)
+      this.logger.info(`${query.body.items.length} crds loaded`)
     }
-    this.logger.debug('loading complete')
+    this.logger.info('loading complete')
     this.initialised = true
   }
 
@@ -276,6 +276,9 @@ export default class Kubernetes implements IKubernetes {
     let kindLower = kind.toLowerCase()
     if (kindLower === 'networkpolicy') {
       kindLower = 'networkpolicie'
+    }
+    if (kindLower === 'authorizationpolicy') {
+      kindLower = 'authorizationpolicie'
     }
     return { api, version, kind: kindLower }
   }

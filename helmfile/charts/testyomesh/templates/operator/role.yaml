@@ -14,3 +14,12 @@ rules:
       - list
       - get
       - patch
+  - apiGroups:
+    - security.istio.io
+    resources:
+    - authorizationpolicies
+    verbs:
+    - list
+    - get
+    - create
+    - delete

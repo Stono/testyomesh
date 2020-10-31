@@ -25,9 +25,9 @@ const apps: {
 } = {
   operator: async (): Promise<IWebServer> => {
     const kubernetes = new Kubernetes()
-    const config = new Config()
-
     await kubernetes.start()
+
+    const config = new Config()
     await config.start()
 
     const service = new Operator(kubernetes, config)

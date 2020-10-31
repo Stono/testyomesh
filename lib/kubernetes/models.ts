@@ -81,6 +81,11 @@ export namespace Models {
       name?: string
     }
 
+    export interface AuthorizationPolicy extends IBaseResource {
+      kind: 'AuthorizationPolicy'
+      apiVersion: 'security.istio.io/v1beta1'
+    }
+
     export interface ISidecar extends IBaseResource {
       kind: 'Sidecar'
       apiVersion: 'networking.istio.io/v1beta1'
