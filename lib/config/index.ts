@@ -1,6 +1,7 @@
 import Logger from 'lib/logger'
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
+import { HttpMethod } from 'lib/apps/loadTester'
 
 const logger = new Logger('config')
 
@@ -8,12 +9,16 @@ export interface IConfig {
   workerThreadCount: number
   simpleServices: number
   simpleServiceNames: string[]
+  httpMethods: HttpMethod[]
+  httpPaths: string[]
 }
 
 export default class Config implements IConfig {
   public workerThreadCount = 2
   public simpleServices = 3
   public simpleServiceNames: string[] = []
+  public httpMethods: HttpMethod[] = ['GET']
+  public httpPaths: string[] = ['/instant']
 
   async start(): Promise<void> {
     const configPath = '/etc/config/config.yaml'

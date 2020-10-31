@@ -2,7 +2,7 @@ import { IConfig } from 'lib/config'
 import got from 'got'
 import WebServer from 'lib/web-server'
 
-type HttpMethod = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
+export type HttpMethod = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
 interface ITask {
   method: HttpMethod
   url: string
@@ -10,15 +10,6 @@ interface ITask {
 
 export class LoadTester extends WebServer {
   private readonly config: IConfig
-  private static readonly HTTP_METHODS: HttpMethod[] = [
-    'GET',
-    'HEAD',
-    'POST',
-    'PUT',
-    'PATCH',
-    'DELETE'
-  ]
-  private static readonly HTTP_ENDPOINTS: string[] = ['/instant', '/delayed']
   private readonly tasks: ITask[] = []
   private running = true
 
@@ -31,8 +22,8 @@ export class LoadTester extends WebServer {
         (other) => other !== service
       )
 
-      LoadTester.HTTP_METHODS.forEach((method) => {
-        const endpoints = LoadTester.HTTP_ENDPOINTS
+      config.httpMethods.forEach((method) => {
+        const endpoints = config.httpPaths
         endpoints.forEach((endpoint) => {
           this.tasks.push({
             method,
@@ -47,6 +38,10 @@ export class LoadTester extends WebServer {
         })
       })
     })
+
+    if (this.tasks.length === 0) {
+      throw new Error('There are no tasks!')
+    }
   }
 
   public async start(): Promise<void> {

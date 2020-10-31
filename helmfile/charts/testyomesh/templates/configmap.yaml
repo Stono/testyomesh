@@ -7,6 +7,4 @@ metadata:
   name: testyomesh
 data:
   'config.yaml': |
-    {{- range $key, $val := .Values.config }}
-      {{ $key }}: {{ (toString $val)  | quote}}
-    {{- end }}
+{{ .Values.config | toYaml | indent 6 }}

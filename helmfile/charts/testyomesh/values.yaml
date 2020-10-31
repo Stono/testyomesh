@@ -13,3 +13,18 @@ config:
 
   # How many loadTest instances?
   loadTestReplicas: 2
+
+  # Which http methods should we test
+  httpMethods:
+  - 'GET'
+  - 'HEAD'
+  - 'POST'
+  - 'PUT'
+  - 'PATCH'
+  - 'DELETE'
+
+  # Which paths should we hit on the simpleService
+  httpPaths:
+  - '/instant'
+  - '/delayed'
+  - '/instant?code=204'
