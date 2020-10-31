@@ -64,16 +64,18 @@ export class LoadTester implements ILoadTester {
         await got<any>(task.url, { method: task.method, timeout: 10000 })
       } catch (ex) {
         this.logger.error(`${task.method}: ${task.url} failed.`, ex)
+      } finally {
+        if (this.running) {
+          executeRandomTask()
+        }
       }
     }
 
     const threads = parseInt(process.env.WORKER_THREADS || '10', 10)
     this.logger.info(`using ${threads} worker threads`)
 
-    while (this.running) {
-      for (let i = 0; i < threads; i += 1) {
-        await executeRandomTask()
-      }
+    for (let i = 0; i < threads; i += 1) {
+      executeRandomTask()
     }
   }
 
