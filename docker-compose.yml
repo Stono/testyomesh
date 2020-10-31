@@ -1,0 +1,11 @@
+version: '3.2'
+services:
+  testyomesh:
+    image: stono/testyomesh:${VERSION:-latest}
+    build:
+      context: '.'
+      args:
+        NODEJS_VERSION: 14.8.0
+    command: 'nope'
+    environment:
+      WAIT_FOR_ISTIO: 'false'

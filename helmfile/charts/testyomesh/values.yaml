@@ -1,0 +1,10 @@
+docker:
+  image: stono/testyomesh
+  tag: latest
+  pullPolicy: Always
+
+config:
+  # How many worker threads should we spawn to make requets
+  workerThreadCount: 2
+  # How many simpleServices should we spawn
+  simpleServices: 3

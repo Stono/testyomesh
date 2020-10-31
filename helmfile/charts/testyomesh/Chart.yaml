@@ -1,0 +1,9 @@
+name: testyomesh
+version: 0.0.0
+description: Test yo' mesh dawg.
+keywords:
+home:
+sources:
+  - https://github.com/Stono/testyomesh
+engine: gotpl
+deprecated: false

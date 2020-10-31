@@ -1,0 +1,22 @@
+{{ range $i, $e := until (.Values.config.simpleServices | int) }}
+{{ $i := $i | add 1 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: testyomesh-{{ $i }}
+    component: simpleService
+  name: testyomesh-{{ $i }}
+spec:
+  ports:
+    - name: http-web
+      port: 80
+      protocol: TCP
+      targetPort: http-web
+  selector:
+    app: testyomesh-{{ $i }}
+    component: simpleService
+  sessionAffinity: None
+  type: ClusterIP
+{{ end }}

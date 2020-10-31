@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  creationTimestamp: '2020-10-18T18:14:48Z'
+  labels:
+    app: testyomesh
+    component: operator
+  name: operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: operator
+subjects:
+  - kind: ServiceAccount
+    name: operator
+    namespace: {{ .Release.Namespace }}

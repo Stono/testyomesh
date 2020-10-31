@@ -1,0 +1,69 @@
+{{ range $i, $e := until (.Values.config.simpleServices | int) }}
+{{ $i := $i | add 1 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: testyomesh-{{ $i }}
+    component: simpleService
+  name: testyomesh-{{ $i }}
+spec:
+  minReadySeconds: 20
+  progressDeadlineSeconds: 300
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: testyomesh-{{ $i }}
+      component: simpleService
+  strategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: 'true'
+        sidecar.istio.io/proxyCPU: 50m
+        sidecar.istio.io/statsInclusionSuffixes: outlier_detection.ejections_active,upstream_cx_active,upstream_cx_total
+        traffic.sidecar.istio.io/includeInboundPorts: '8080'
+      labels:
+        app: testyomesh-{{ $i }}
+        component: simpleService
+    spec:
+      containers:
+        - name: master
+          args:
+            - simpleService
+          image: {{ required "Please set the image" $.Values.docker.image }}:{{ required "Please set the tag" $.Values.docker.tag }}
+          imagePullPolicy: {{ required "Please set the image pull policy" $.Values.docker.pullPolicy }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - sleep
+                  - '10'
+          ports:
+            - containerPort: 8080
+              name: http-web
+          resources:
+            limits:
+              cpu: '1'
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 80Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+      dnsConfig:
+        options:
+          - name: ndots
+            value: '2'
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: false
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+{{ end }}

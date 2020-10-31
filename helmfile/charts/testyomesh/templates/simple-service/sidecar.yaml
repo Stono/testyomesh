@@ -1,0 +1,11 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Sidecar
+metadata:
+  labels:
+    app: testyomesh
+  name: default
+spec:
+  egress:
+    - hosts:
+        - ./*
+        - default/*

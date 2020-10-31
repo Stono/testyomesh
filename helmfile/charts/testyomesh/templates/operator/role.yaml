@@ -1,0 +1,23 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app: testyomesh
+    component: testyomesh
+  name: operator
+rules:
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+    verbs:
+      - list
+      - get
+      - patch
+  - apiGroups:
+      - ''
+    resources:
+      - configmaps
+    verbs:
+      - list
+      - get

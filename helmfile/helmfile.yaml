@@ -1,0 +1,7 @@
+releases:
+  - name: testyomesh
+    namespace: testyomesh
+    chart: ./charts/testyomesh
+    set:
+      - name: docker.tag
+        value: latest
