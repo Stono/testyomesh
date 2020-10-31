@@ -8,7 +8,7 @@ metadata:
 spec:
   minReadySeconds: 20
   progressDeadlineSeconds: 300
-  replicas: 1
+  replicas: {{ $.Values.config.loadTestReplicas }}
   revisionHistoryLimit: 1
   selector:
     matchLabels:

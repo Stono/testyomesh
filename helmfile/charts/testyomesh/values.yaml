@@ -8,3 +8,8 @@ config:
   workerThreadCount: 30
   # How many simpleServices should we spawn
   simpleServices: 3
+  # How many replicas of each simple service?
+  simpleServiceReplicas: 1
+
+  # How many loadTest instances?
+  loadTestReplicas: 2

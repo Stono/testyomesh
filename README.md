@@ -33,7 +33,7 @@ Well, I'm presuming you're already monitoring, graphing and alerting on the isti
 
 ## How do I install it
 
-There's a helm chart in the `/helmfile/charts/testyomesh` folder, or you can get [helmfile](https://github.com/roboll/helmfile), and simply type `helmfile sync` from the `helmfile/` folder.
+There's a helm chart in the [./helmfile/charts/testyomesh](./helmfile/charts/testyomesh) folder, or you can get [helmfile](https://github.com/roboll/helmfile), and simply type `helmfile sync` from the `helmfile/` folder.
 
 I'll get around to versioned releases when I have time, until then you probably want to store the latest image in your registry, so:
 
@@ -41,3 +41,7 @@ I'll get around to versioned releases when I have time, until then you probably 
  - `docker test stono/testyomesh:latest you-registry:whatever`
 
  And then update `helmfile/charts/testyomesh/values.yaml` accordingly.
+
+### How about config?
+
+The things you can currently configure are in [./helmfile/charts/testyomesh/values.yaml](./helmfile/charts/testyomesh/values.yaml]).  The out of the box configuration will give you `2` load test replicas running `30` threads, `3` simple services, and `1` operator.  This will give you around 150 ops/second.
