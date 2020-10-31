@@ -15,14 +15,6 @@ Like this:
 
 This is what each of the components do:
 
-#### simple-service
-
-`simple-service` is what it says, a simple `http` web server which has a few endpoints for poking:
-
- - `/instant?code={code}` - to return an instant response with a given status code
- - `/delayed?code={code}` - as `instant`, but with a random delay (or fixed, if you pass `deplay={delay}`)
- - `/downstream?servers=another-app/instant` - allows you to tell the server to make a subsequent downstream request to another app, and return an aggregate response
-
 #### operator
 
 Think of `operator` as a chaos monkey.  It runs tasks in `lib/apps/tasks` to intentionally create some chaos that _should not_ cause any errors!  Currently implemented tasks are:
@@ -40,6 +32,14 @@ Load tester looks at your configuration and attempts to think of all the differe
  - Requesting different status codes too, eg: `service1 -- POST /instant?code=204 --> service2`
 
 It might seem excessive, but the cardinality of the requests will help you find subtle issues such as [this issue with content-encoding on 204 responses](https://github.com/istio/istio/issues/28433).
+
+#### simple-service
+
+`simple-service` is what it says, a simple `http` web server which has a few endpoints for poking:
+
+ - `/instant?code={code}` - to return an instant response with a given status code
+ - `/delayed?code={code}` - as `instant`, but with a random delay (or fixed, if you pass `deplay={delay}`)
+ - `/downstream?servers=another-app/instant` - allows you to tell the server to make a subsequent downstream request to another app, and return an aggregate response
 
 ## How do I know somethings broken?
 
