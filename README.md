@@ -1,5 +1,5 @@
 # testyomesh
-![dawg](dawg.png)
+![dawg](yodawg.png)
 
 ## Enough with the memes, what is this?
 
