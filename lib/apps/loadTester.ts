@@ -41,9 +41,10 @@ export class LoadTester extends WebServer {
               this.tasks.push({
                 method,
                 searchParams: {
-                  code
+                  code,
+                  servers: `${otherService}.testyomesh.svc.cluster.local${path}`
                 },
-                url: `http://${service}.testyomesh.svc.cluster.local/downstream?servers=${otherService}.testyomesh.svc.cluster.local${path}`
+                url: `http://${service}.testyomesh.svc.cluster.local/downstream`
               })
             })
           }
