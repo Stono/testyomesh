@@ -9,6 +9,10 @@ Therefore, I accept that when testing Istio releases in my environment, I'm goin
 
 ### How?
 
+Like this:
+
+![architecture](architecture.png)
+
 It basically a bunch of services, with a load tester that generates a variety (about 150) of different types of requests.  It does this by:
 
  - Calculating each different permutation of request, eg `service1 -> service2 -> service3`, or perhaps `service3 -> service1`
