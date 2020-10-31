@@ -3,7 +3,7 @@
 
 ## Enough with the memes, what is this?
 
-I've been upgrading [Istio](https://github.com/istio/istio) pretty much since it was born.  I've encountered my fair share of bugs during the upgrade process, and the vast majority are due to nuances in my configursation or environment, rather than obvious bugs in core components.
+I've been upgrading [Istio](https://github.com/istio/istio) pretty much since it was born.  I've encountered my fair share of bugs during the upgrade process, and the vast majority are due to nuances in my configuratin or environment, rather than obvious bugs in core components.
 
 Therefore, I accept that when testing Istio releases in my environment, I'm going to find issues.  This project is about surfacing those issues as soon as possible during release testing in a qualifying environment.
 
