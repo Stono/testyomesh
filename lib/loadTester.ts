@@ -1,7 +1,6 @@
 import { IConfig } from 'lib/config'
 import Logger from './logger'
 import got from 'got'
-import Operator from './apps/operator'
 
 type HttpMethod = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
 interface ITask {
@@ -31,8 +30,8 @@ export class LoadTester implements ILoadTester {
 
   constructor(config: IConfig) {
     this.config = config
-    Operator.HTTP_SERVICES.forEach((service) => {
-      const otherServices = Operator.HTTP_SERVICES.filter(
+    this.config.simpleServiceNames.forEach((service) => {
+      const otherServices = this.config.simpleServiceNames.filter(
         (other) => other !== service
       )
 

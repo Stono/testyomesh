@@ -20,14 +20,16 @@ if (!startApp) {
   throw new Error('Please specify which app to start')
 }
 
-const apps: { [key: string]: () => Promise<IWebServer> } = {
+const apps: {
+  [key: string]: () => Promise<IWebServer>
+} = {
   operator: async (): Promise<IWebServer> => {
     const kubernetes = new Kubernetes()
-    const config = new Config(kubernetes)
     await kubernetes.start()
+    const config = new Config(kubernetes)
     await config.start()
     const loadTester = new LoadTester(config)
-    const service = new Operator(kubernetes, loadTester)
+    const service = new Operator(kubernetes, loadTester, config)
     return service
   },
   simpleService: async (): Promise<IWebServer> => {
