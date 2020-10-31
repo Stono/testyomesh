@@ -12,7 +12,7 @@ export default class Operator extends WebServer {
     'testyomesh-2',
     'testyomesh-3'
   ]
-  private patchInterval: NodeJS.Timeout | undefined
+  private running = true
 
   constructor(kubernetes: IKubernetes, loadTester: ILoadTester) {
     super()
@@ -23,25 +23,38 @@ export default class Operator extends WebServer {
   public async start(): Promise<void> {
     await this.loadTester.start()
 
-    const patchServices = async () => {
-      this.logger.info('patching services to trigger a deployment')
-      Operator.HTTP_SERVICES.forEach((service) => {
+    const patchService = (service: string) => {
+      return async () => {
+        this.logger.info(`patching ${service} to trigger a deployment`)
         this.kubernetes.rollout<Models.Core.IDeployment>(
           'apps/v1',
           'Deployment',
           'testyomesh',
           service
         )
-      })
+        if (this.running) {
+          const schedule = this.nextInterval()
+          this.logger.info(`next patch for ${service} in ${schedule}ms`)
+          setTimeout(patchService(service), schedule)
+        }
+      }
     }
-    this.patchInterval = setInterval(patchServices, 1000 * 60 * 10)
+
+    Operator.HTTP_SERVICES.forEach((service) => {
+      const schedule = this.nextInterval()
+      this.logger.info(`next patch for ${service} in ${schedule}ms`)
+      setTimeout(patchService(service), schedule)
+    })
+
     return super.start()
   }
 
+  private nextInterval(): number {
+    return Math.floor(Math.random() * 1000 * 60 * 10)
+  }
+
   public async stop(): Promise<void> {
-    if (this.patchInterval) {
-      clearInterval(this.patchInterval)
-    }
+    this.running = false
     return super.stop()
   }
 }

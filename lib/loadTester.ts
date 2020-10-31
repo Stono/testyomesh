@@ -71,10 +71,9 @@ export class LoadTester implements ILoadTester {
       }
     }
 
-    const threads = parseInt(process.env.WORKER_THREADS || '10', 10)
-    this.logger.info(`using ${threads} worker threads`)
+    this.logger.info(`using ${this.config.workerThreadCount} worker threads`)
 
-    for (let i = 0; i < threads; i += 1) {
+    for (let i = 0; i < this.config.workerThreadCount; i += 1) {
       executeRandomTask()
     }
   }

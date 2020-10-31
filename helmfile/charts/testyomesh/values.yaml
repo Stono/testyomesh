@@ -5,6 +5,6 @@ docker:
 
 config:
   # How many worker threads should we spawn to make requets
-  workerThreadCount: 10
+  workerThreadCount: 20
   # How many simpleServices should we spawn
   simpleServices: 3
