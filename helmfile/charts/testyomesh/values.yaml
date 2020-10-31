@@ -1,7 +1,7 @@
 docker:
   image: stono/testyomesh
   tag: latest
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 config:
   # How many worker threads should we spawn to make requets
