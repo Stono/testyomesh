@@ -39,7 +39,7 @@ Load tester looks at your configuration and attempts to think of all the differe
  - Using a mixture of instant and delayed routes, eg `service1 -- GET /instant --> service3`, or perhaps `service2 -- POST /delayed --> service3`
  - Requesting different status codes too, eg: `service1 -- POST /instant?code=204 --> service2`
 
-It might seem excessive, but the cardinality of the request will help you find subtle issues such as [this issue with content-encoding on 204 responses](https://github.com/istio/istio/issues/28433).
+It might seem excessive, but the cardinality of the requests will help you find subtle issues such as [this issue with content-encoding on 204 responses](https://github.com/istio/istio/issues/28433).
 
 ## How do I know somethings broken?
 
