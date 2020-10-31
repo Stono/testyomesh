@@ -19,7 +19,7 @@ It's the cardinality of the test that's helped me find way more issues than just
 
 ### But wait, there's more!
 
-I've hit many-a-bugs causing by rolling deployments, for example when you update your control-plane, and then rolling restart an app, so you have varying proxy versions.  As a result, `testyomesh` also periodically (between 5 and 10 mins) rolling restarts all the services to create some churn.
+I've hit many-a-bugs causing by rolling deployments, for example when you update your control-plane, and then rolling restart an app, so you have varying proxy versions.  As a result, `testyomesh` has an operator which periodically (between 5 and 10 mins) rolling restarts all the services to create some churn.
 
 ## How do I know somethings broken?
 

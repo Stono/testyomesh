@@ -6,7 +6,7 @@ kind: Service
 metadata:
   labels:
     app: testyomesh-{{ $i }}
-    component: simpleService
+    component: simple-service
   name: testyomesh-{{ $i }}
 spec:
   ports:
@@ -16,7 +16,7 @@ spec:
       targetPort: http-web
   selector:
     app: testyomesh-{{ $i }}
-    component: simpleService
+    component: simple-service
   sessionAffinity: None
   type: ClusterIP
 {{ end }}

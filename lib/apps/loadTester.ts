@@ -1,6 +1,6 @@
 import { IConfig } from 'lib/config'
-import Logger from './logger'
 import got from 'got'
+import WebServer from 'lib/web-server'
 
 type HttpMethod = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
 interface ITask {
@@ -8,14 +8,8 @@ interface ITask {
   url: string
 }
 
-export interface ILoadTester {
-  start(): Promise<void>
-  stop(): Promise<void>
-}
-
-export class LoadTester implements ILoadTester {
+export class LoadTester extends WebServer {
   private readonly config: IConfig
-  private readonly logger = new Logger('load-tester')
   private static readonly HTTP_METHODS: HttpMethod[] = [
     'GET',
     'HEAD',
@@ -29,6 +23,8 @@ export class LoadTester implements ILoadTester {
   private running = true
 
   constructor(config: IConfig) {
+    super()
+
     this.config = config
     this.config.simpleServiceNames.forEach((service) => {
       const otherServices = this.config.simpleServiceNames.filter(

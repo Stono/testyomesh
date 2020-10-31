@@ -1,13 +1,10 @@
-{{ range $i, $e := until (.Values.config.simpleServices | int) }}
-{{ $i := $i | add 1 }}
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: testyomesh-{{ $i }}
-    component: simple-service
-  name: testyomesh-{{ $i }}
+    app: testyomesh
+    component: load-tester
+  name: load-tester
 spec:
   minReadySeconds: 20
   progressDeadlineSeconds: 300
@@ -15,8 +12,8 @@ spec:
   revisionHistoryLimit: 1
   selector:
     matchLabels:
-      app: testyomesh-{{ $i }}
-      component: simple-service
+      app: testyomesh
+      component: load-tester
   strategy:
     rollingUpdate:
       maxSurge: 100%
@@ -25,20 +22,28 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config: '{{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}'
         sidecar.istio.io/inject: 'true'
         sidecar.istio.io/proxyCPU: 50m
         sidecar.istio.io/statsInclusionSuffixes: outlier_detection.ejections_active,upstream_cx_active,upstream_cx_total
         traffic.sidecar.istio.io/includeInboundPorts: '8080'
       labels:
-        app: testyomesh-{{ $i }}
-        component: simple-service
+        app: testyomesh
+        component: load-tester
     spec:
+      volumes:
+      - name: config-volume
+        configMap:
+          name: testyomesh
       containers:
         - name: master
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/config
           args:
-            - simpleService
-          image: {{ required "Please set the image" $.Values.docker.image }}:{{ required "Please set the tag" $.Values.docker.tag }}
-          imagePullPolicy: {{ required "Please set the image pull policy" $.Values.docker.pullPolicy }}
+            - loadTester
+          image: {{ required "Please set the image" .Values.docker.image }}:{{ required "Please set the tag" .Values.docker.tag }}
+          imagePullPolicy: {{ required "Please set the image pull policy" .Values.docker.pullPolicy }}
           lifecycle:
             preStop:
               exec:
@@ -66,4 +71,4 @@ spec:
       enableServiceLinks: false
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
-{{ end }}
+      serviceAccountName: load-tester

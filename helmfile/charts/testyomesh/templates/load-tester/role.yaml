@@ -3,17 +3,9 @@ kind: Role
 metadata:
   labels:
     app: testyomesh
-    component: operator
-  name: operator
+    component: testyomesh
+  name: load-tester
 rules:
-  - apiGroups:
-      - apps
-    resources:
-      - deployments
-    verbs:
-      - list
-      - get
-      - patch
   - apiGroups:
       - ''
     resources:

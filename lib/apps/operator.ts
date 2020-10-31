@@ -2,29 +2,20 @@
 import { IKubernetes } from 'lib/kubernetes/client'
 import WebServer from 'lib/web-server'
 import { Models } from 'lib/kubernetes/models'
-import { ILoadTester } from 'lib/loadTester'
 import { IConfig } from 'lib/config'
 
 export default class Operator extends WebServer {
   private kubernetes: IKubernetes
-  private loadTester: ILoadTester
   private config: IConfig
   private running = true
 
-  constructor(
-    kubernetes: IKubernetes,
-    loadTester: ILoadTester,
-    config: IConfig
-  ) {
+  constructor(kubernetes: IKubernetes, config: IConfig) {
     super()
     this.kubernetes = kubernetes
-    this.loadTester = loadTester
     this.config = config
   }
 
   public async start(): Promise<void> {
-    await this.loadTester.start()
-
     const patchService = (service: string) => {
       return async () => {
         this.logger.info(`patching ${service} to trigger a deployment`)

@@ -12,7 +12,7 @@ import Operator from 'lib/apps/operator'
 import Kubernetes from 'lib/kubernetes/client'
 import SimpleServer from 'lib/apps/simple-server'
 import { IWebServer } from 'lib/web-server'
-import { LoadTester } from 'lib/loadTester'
+import { LoadTester } from 'lib/apps/loadTester'
 import Config from 'lib/config'
 
 const startApp = process.argv[2]
@@ -25,16 +25,24 @@ const apps: {
 } = {
   operator: async (): Promise<IWebServer> => {
     const kubernetes = new Kubernetes()
+    const config = new Config()
+
     await kubernetes.start()
-    const config = new Config(kubernetes)
     await config.start()
-    const loadTester = new LoadTester(config)
-    const service = new Operator(kubernetes, loadTester, config)
+
+    const service = new Operator(kubernetes, config)
     return service
   },
   simpleService: async (): Promise<IWebServer> => {
     const service = new SimpleServer()
     return service
+  },
+  loadTester: async (): Promise<IWebServer> => {
+    const config = new Config()
+    await config.start()
+
+    const loadTester = new LoadTester(config)
+    return loadTester
   }
 }
 

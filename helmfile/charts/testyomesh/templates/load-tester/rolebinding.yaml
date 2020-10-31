@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  creationTimestamp: '2020-10-18T18:14:48Z'
+  labels:
+    app: testyomesh
+    component: load-tester
+  name: load-tester
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: load-tester
+subjects:
+  - kind: ServiceAccount
+    name: load-tester
+    namespace: {{ .Release.Namespace }}

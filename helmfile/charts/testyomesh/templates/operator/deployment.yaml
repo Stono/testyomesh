@@ -22,21 +22,30 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: '{{ include (print $.Template.BasePath "/operator/configmap.yaml") . | sha256sum }}'
-        sidecar.istio.io/inject: 'true'
-        sidecar.istio.io/proxyCPU: 50m
+        checksum/config: '{{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}'
+        sidecar.istio.io/inject: 'false'
         sidecar.istio.io/statsInclusionSuffixes: outlier_detection.ejections_active,upstream_cx_active,upstream_cx_total
         traffic.sidecar.istio.io/includeInboundPorts: '8080'
       labels:
         app: testyomesh
         component: operator
     spec:
+      volumes:
+      - name: config-volume
+        configMap:
+          name: testyomesh
       containers:
         - name: master
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/config
           args:
             - operator
           image: {{ required "Please set the image" .Values.docker.image }}:{{ required "Please set the tag" .Values.docker.tag }}
           imagePullPolicy: {{ required "Please set the image pull policy" .Values.docker.pullPolicy }}
+          env:
+          - name: WAIT_FOR_ISTIO
+            value: "false"
           lifecycle:
             preStop:
               exec:
