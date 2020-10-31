@@ -50,7 +50,11 @@ export default class Operator extends WebServer {
   }
 
   private nextInterval(): number {
-    return Math.floor(Math.random() * 1000 * 60 * 10)
+    function randomIntFromInterval(min, max) {
+      const part1 = Math.random() * (max - min + 1)
+      return Math.floor(part1 + min)
+    }
+    return Math.floor(Math.random() * 1000 * 60 * randomIntFromInterval(5, 10))
   }
 
   public async stop(): Promise<void> {
