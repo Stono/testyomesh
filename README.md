@@ -44,4 +44,4 @@ I'll get around to versioned releases when I have time, until then you probably 
 
 ### How about config?
 
-The things you can currently configure are in [./helmfile/charts/testyomesh/values.yaml](./helmfile/charts/testyomesh/values.yaml]).  The out of the box configuration will give you `2` load test replicas running `30` threads, `3` simple services, and `1` operator.  This will give you around 150 ops/second.
+The things you can currently configure are in [./helmfile/charts/testyomesh/values.yaml](./helmfile/charts/testyomesh/values.yaml).  The out of the box configuration will give you `2` load test replicas running `30` threads, `3` simple services, and `1` operator.  This will give you around 150 ops/second.
