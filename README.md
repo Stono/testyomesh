@@ -13,22 +13,31 @@ Like this:
 
 ![architecture](architecture.png)
 
-It basically a bunch of services, with a load tester that generates a variety (about 150) of different types of requests.  It does this by:
+This is what each of the components do:
+
+#### simple-service
+
+`simple-service` is what it says, a simple `http` web server which has a few endpoints for poking:
+
+ - `/instant?code={code}` - to return an instant response with a given status code
+ - `/delayed?code={code}` - as `instant`, but with a random delay (or fixed, if you pass `deplay={delay}`)
+ - `/downstream?servers=another-app/instant` - allows you to tell the server to make a subsequent downstream request to another app, and return an aggregate response
+
+#### operator
+
+Think of `operator` as a chaos monkey.  It runs tasks in `lib/apps/tasks` to intentionally create some chaos that _should not_ cause any errors!  Currently implemented tasks are:
+
+ - `auth-policy` - creates and deletes a `security.istio.io/v1beta1/AuthorizationPolicy` every 5-10 minutes, which triggers an inbound listener reload.  You need to be on `1.6+` for this to work (logs errors otherwise).
+ - `restart-simple-service` - every 5-10 mins will pick a random `simple-service` and rolling restart it
+
+#### load-tester
+
+Load tester looks at your configuration and attempts to think of all the different ways it can poke your services, by:
 
  - Calculating each different permutation of request, eg `service1 -> service2 -> service3`, or perhaps `service3 -> service1`
- - Adds in all the different HTTP methods to that mix, eg `service1 -- GET --> service2`, or perhaps `service2 -- PATCH --> service1`
- - Uses a mixture of instant and delayed routes, eg `service1 -- GET /instant --> service3`, or perhaps `service2 -- POST /delayed --> service3`
- - Requests different status codes too, eg: `service1 -- POST /instant?code=204 --> service2`
-
-You get the idea.  It's the cardinality of the test that's helped me find way more issues than just bog standard load tests.
-
-### But wait, there's more!
-
-I've hit many-a-bugs causing by rolling deployments, for example when you update your control-plane, and then rolling restart an app, so you have varying proxy versions.  As a result, `testyomesh` has an operator which periodically (between 5 and 10 mins) rolling restarts all the services to create some churn.
-
-### But wait, there's even more!
-
-I've hit a few bugs in the past when listeners get reloaded, therefore the `operator` also creates and deleting a `security.istio.io/v1beta1/AuthorizationPolicy` every 5-10 minutes, which triggers an inbound listener reload.  You need to be on `1.6+` for this to work (logs errors otherwise).
+ - Adding in all the different HTTP methods to that mix, eg `service1 -- GET --> service2`, or perhaps `service2 -- PATCH --> service1`
+ - Using a mixture of instant and delayed routes, eg `service1 -- GET /instant --> service3`, or perhaps `service2 -- POST /delayed --> service3`
+ - Requesting different status codes too, eg: `service1 -- POST /instant?code=204 --> service2`
 
 ## How do I know somethings broken?
 
