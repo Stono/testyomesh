@@ -25,6 +25,8 @@ I've hit many-a-bugs causing by rolling deployments, for example when you update
 
 Well, I'm presuming you're already monitoring, graphing and alerting on the istio request metrics such as `istio_requests_total{response_code=~"5.*"}`.  So that's on you.
 
+![dashboard](dashboard.png)
+
 ## How do I install it
 
 There's a helm chart in the `/helmfile/charts/testyomesh` folder, or you can get [helmfile](https://github.com/roboll/helmfile), and simply type `helmfile sync` from the `helmfile/` folder.
