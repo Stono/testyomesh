@@ -71,4 +71,3 @@ spec:
       enableServiceLinks: false
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
-      serviceAccountName: load-tester
