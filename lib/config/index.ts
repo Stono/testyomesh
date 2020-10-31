@@ -11,6 +11,7 @@ export interface IConfig {
   simpleServiceNames: string[]
   httpMethods: HttpMethod[]
   httpPaths: string[]
+  statusCodes: number[]
 }
 
 export default class Config implements IConfig {
@@ -19,6 +20,7 @@ export default class Config implements IConfig {
   public simpleServiceNames: string[] = []
   public httpMethods: HttpMethod[] = ['GET']
   public httpPaths: string[] = ['/instant']
+  public statusCodes: number[] = [200]
 
   async start(): Promise<void> {
     const configPath = '/etc/config/config.yaml'

@@ -18,8 +18,9 @@ It basically a bunch of services, with a load tester that generates a variety (a
  - Calculating each different permutation of request, eg `service1 -> service2 -> service3`, or perhaps `service3 -> service1`
  - Adds in all the different HTTP methods to that mix, eg `service1 -- GET --> service2`, or perhaps `service2 -- PATCH --> service1`
  - Uses a mixture of instant and delayed routes, eg `service1 -- GET /instant --> service3`, or perhaps `service2 -- POST /delayed --> service3`
+ - Requests different status codes too, eg: `service1 -- POST /instant?code=204 --> service2`
 
-It's the cardinality of the test that's helped me find way more issues than just bog standard load tests.
+You get the idea.  It's the cardinality of the test that's helped me find way more issues than just bog standard load tests.
 
 ### But wait, there's more!
 

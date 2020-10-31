@@ -5,6 +5,7 @@ import WebServer from 'lib/web-server'
 export type HttpMethod = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
 interface ITask {
   method: HttpMethod
+  searchParams: any
   url: string
 }
 
@@ -17,27 +18,43 @@ export class LoadTester extends WebServer {
     super()
 
     this.config = config
-    this.config.simpleServiceNames.forEach((service) => {
+
+    const forEachService = (service) => {
       const otherServices = this.config.simpleServiceNames.filter(
         (other) => other !== service
       )
 
-      config.httpMethods.forEach((method) => {
-        const endpoints = config.httpPaths
-        endpoints.forEach((endpoint) => {
-          this.tasks.push({
-            method,
-            url: `http://${service}.testyomesh.svc.cluster.local${endpoint}`
-          })
-          otherServices.forEach((otherService) => {
+      const forEachMethod = (method) => {
+        const forEachPath = (path) => {
+          const forEachCode = (code) => {
+            // Add each permutation of method, and path
             this.tasks.push({
               method,
-              url: `http://${service}.testyomesh.svc.cluster.local/downstream?servers=${otherService}.testyomesh.svc.cluster.local${endpoint}`
+              searchParams: {
+                code
+              },
+              url: `http://${service}.testyomesh.svc.cluster.local${path}`
             })
-          })
-        })
-      })
-    })
+
+            // Now add a downstream request with the same
+            otherServices.forEach((otherService) => {
+              this.tasks.push({
+                method,
+                searchParams: {
+                  code
+                },
+                url: `http://${service}.testyomesh.svc.cluster.local/downstream?servers=${otherService}.testyomesh.svc.cluster.local${path}`
+              })
+            })
+          }
+          config.statusCodes.forEach(forEachCode)
+        }
+        config.httpPaths.forEach(forEachPath)
+      }
+      config.httpMethods.forEach(forEachMethod)
+    }
+
+    this.config.simpleServiceNames.forEach(forEachService)
 
     if (this.tasks.length === 0) {
       throw new Error('There are no tasks!')
@@ -49,9 +66,13 @@ export class LoadTester extends WebServer {
 
     const executeRandomTask = async (): Promise<void> => {
       const task = this.tasks[Math.floor(Math.random() * this.tasks.length)]
-      this.logger.info(`${task.method}: ${task.url}`)
+      this.logger.info('running', task)
       try {
-        await got<any>(task.url, { method: task.method, timeout: 10000 })
+        await got<any>(task.url, {
+          searchParams: task.searchParams,
+          method: task.method,
+          timeout: 10000
+        })
       } catch (ex) {
         this.logger.error(`${task.method}: ${task.url} failed.`, ex)
       } finally {

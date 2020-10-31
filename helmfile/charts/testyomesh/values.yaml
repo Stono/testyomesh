@@ -27,4 +27,10 @@ config:
   httpPaths:
   - '/instant'
   - '/delayed'
-  - '/instant?code=204'
+
+  # Which status codes should we request back from downstream calls
+  statusCodes:
+  - 200
+  - 201
+  - 202
+  - 204
