@@ -26,8 +26,8 @@ export class LoadTester implements ILoadTester {
     'DELETE'
   ]
   private static readonly HTTP_ENDPOINTS: string[] = ['/instant', '/delayed']
-  private workers: NodeJS.Timeout[] = []
   private readonly tasks: ITask[] = []
+  private running = true
 
   constructor(config: IConfig) {
     this.config = config
@@ -67,30 +67,17 @@ export class LoadTester implements ILoadTester {
       }
     }
 
-    const threads = parseInt(process.env.WORKER_THREADS || '2', 10)
+    const threads = parseInt(process.env.WORKER_THREADS || '10', 10)
     this.logger.info(`using ${threads} worker threads`)
 
-    function createWorkerArray(): Promise<void>[] {
-      const arr: Promise<void>[] = []
+    while (this.running) {
       for (let i = 0; i < threads; i += 1) {
-        arr.push(executeRandomTask())
+        await executeRandomTask()
       }
-      return arr
     }
-
-    const workerInterval = setInterval(async () => {
-      try {
-        await Promise.all(createWorkerArray())
-      } catch (err) {
-        this.logger.error(err)
-        process.exit(1)
-      }
-    }, 200)
-
-    this.workers.push(workerInterval)
   }
 
   public async stop(): Promise<void> {
-    this.workers.forEach(clearInterval)
+    this.running = false
   }
 }

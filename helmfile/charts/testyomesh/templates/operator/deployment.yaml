@@ -22,6 +22,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config: '{{ include (print $.Template.BasePath "/operator/configmap.yaml") . | sha256sum }}'
         sidecar.istio.io/inject: 'true'
         sidecar.istio.io/proxyCPU: 50m
         sidecar.istio.io/statsInclusionSuffixes: outlier_detection.ejections_active,upstream_cx_active,upstream_cx_total
