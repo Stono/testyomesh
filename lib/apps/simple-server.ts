@@ -13,7 +13,7 @@ export default class SimpleServer extends WebServer {
   private handleInstantRequest(req: Request, res: Response): void {
     const id = req.headers['x-request-id']
     const code = req.query.code ? parseInt(req.query.code as string, 10) : 200
-    this.logger.info(`${id} sending instant response`)
+    this.logger.debug(`${id} sending instant response`)
     this.sendMessage(`instant response`, res, req, code)
   }
 
@@ -24,7 +24,7 @@ export default class SimpleServer extends WebServer {
       ? parseInt(req.query.delay as string, 10)
       : Math.floor(Math.random() * 3000) + 1
 
-    this.logger.info(`${id} sending a delayed response in`, returnAt, 'ms')
+    this.logger.debug(`${id} sending a delayed response in`, returnAt, 'ms')
     this.sendDelayedMessage('delayed response', returnAt, res, req, code)
   }
 
@@ -41,7 +41,7 @@ export default class SimpleServer extends WebServer {
       ? (req.query.servers as string).split(',')
       : []
 
-    this.logger.info(`${id} handling downstream request`, {
+    this.logger.debug(`${id} handling downstream request`, {
       servers
     })
     const headers = {}
@@ -62,11 +62,11 @@ export default class SimpleServer extends WebServer {
 
     Promise.all(promises)
       .then((results) => {
-        this.logger.info(`${id} downstream requests complete`)
+        this.logger.debug(`${id} downstream requests complete`)
         this.sendMessage(results, res, req)
       })
       .catch((rejection) => {
-        this.logger.info(`${id} downstream requests failed`, rejection)
+        this.logger.warn(`${id} downstream requests failed`, rejection)
         res.sendStatus(500)
       })
   }
